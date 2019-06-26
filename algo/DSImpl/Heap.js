@@ -12,15 +12,7 @@ class BinaryHeap {
     heap.tree = arr
 
     if (heapify) {
-      // heapify from the first non-leaf node
-      const firstNonLeaf = Math.floor(heap.size / 2 - 1)
-      // console.log('heapify ' + heap.toArray() + ' from #' + firstNonLeaf)
-
-      for (let i = firstNonLeaf; i >= 0; i--) {
-        // console.log(`heapify #${i}(${heap.tree[i]})`)
-        heap.siftDown(i)
-        // console.log('    got ' + heap.toArray())
-      }
+      heap.heapify()
     }
 
     return heap
@@ -28,6 +20,18 @@ class BinaryHeap {
 
   toArray() {
     return this.tree.slice()
+  }
+
+  get top() {
+    return this.tree[0]
+  }
+
+  set top(value) {
+    this.tree[0] = value
+  }
+
+  get size() {
+    return this.tree.length
   }
 
   push(item) {
@@ -41,14 +45,6 @@ class BinaryHeap {
     this.tree.pop()
     this.siftDown(0)
     return top
-  }
-
-  get top() {
-    return this.tree[0]
-  }
-
-  set top(value) {
-    this.tree[0] = value
   }
 
   // delete(index) {}
@@ -65,17 +61,22 @@ class BinaryHeap {
     }
   }
 
-  siftDown(index) {
+  siftDown(index, length) {
+    if (length == null) {
+      length = this.size
+    }
+    // console.log('sifting down, heap size = ' + length)
+
     let left, right
     do {
       left = this._getLeftChildIndex(index)
       right = this._getRightChildIndex(index)
       let largest = index
 
-      if (left <= this.size && this.compare(this.tree[largest], this.tree[left]) < 0) {
+      if (left < length && this.compare(this.tree[largest], this.tree[left]) < 0) {
         largest = left
       }
-      if (right <= this.size && this.compare(this.tree[largest], this.tree[right]) < 0) {
+      if (right < length && this.compare(this.tree[largest], this.tree[right]) < 0) {
         largest = right
       }
 
@@ -90,8 +91,30 @@ class BinaryHeap {
     } while (true)
   }
 
-  get size() {
-    return this.tree.length
+  heapify(length) {
+    if (length == null) {
+      length = this.size
+    }
+
+    // heapify from the first non-leaf node
+    const firstNonLeaf = Math.floor(length / 2 - 1)
+    // console.log('heapify ' + this.toArray() + ' from #' + firstNonLeaf)
+
+    for (let i = firstNonLeaf; i >= 0; i--) {
+      // console.log(`heapify #${i}(${this.tree[i]})`)
+      this.siftDown(i, length)
+      // console.log('    got ' + this.toArray())
+    }
+  }
+
+  sort() {
+    for (let i = this.size; i > 0; i--) {
+      this._swap(0, i - 1)
+      // console.log(this.toArray().slice(0, i), this.toArray().slice(i + 1))
+      this.heapify(i - 1)
+      // console.log(this.toArray().slice(0, i), this.toArray().slice(i + 1))
+    }
+    return this.toArray()
   }
 
   _swap(index1, index2) {
@@ -130,4 +153,5 @@ if (require && require.main === module) {
   // test for heapify
   const heap2 = BinaryHeap.fromArray([7, 5, 19, 8, 4, 1, 20, 13, 16])
   console.log(heap2.toArray())
+  console.log(heap2.sort())
 }
