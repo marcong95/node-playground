@@ -6,6 +6,7 @@ const { DTypes: DT } = require('win32-api')
 
 const iconv = require('iconv-lite')
 
+// eslint-disable-next-line camelcase
 const time_t = ref.types.ulong
 
 const MAX_ADAPTER_NAME_LENGTH = 256
@@ -26,6 +27,7 @@ const IP_ADDR_STRING = Struct({
 const PIP_ADDR_STRING = ref.refType(IP_ADDR_STRING)
 IP_ADDR_STRING.defineProperty('Next', PIP_ADDR_STRING)
 
+// eslint-disable-next-line no-unused-vars
 const __IP_ADAPTER_INFO = Struct({
   // Next: PIP_ADAPTER_INFO,
   ComboIndex: DT.DWORD,
@@ -76,11 +78,11 @@ const ipHelper = ffi.Library('iphlpapi', {
   GetAdaptersInfo: [DT.ULONG, [PIP_ADAPTER_INFO, DT.PULONG]]
 })
 
-const adapterInfo = new IP_ADAPTER_INFO
+const adapterInfo = new IP_ADAPTER_INFO()
 const infoSize = ref.alloc(DT.ULONG)
 
 console.log('before calling GetAdapatersInfo')
-const errCode = ipHelper.GetAdaptersInfo(adapterInfo.ref(), infoSize);
+const errCode = ipHelper.GetAdaptersInfo(adapterInfo.ref(), infoSize)
 console.log('call GetAdaptersInfo: ' + errCode)
 console.log('infoSize: ' + infoSize.deref())
 

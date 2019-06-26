@@ -1,6 +1,6 @@
 const unparsable = 'The quick brown fox jumps over the lazy dog.'
 
-;(function tryParse(str) {
+;(function tryParse (str) {
   try {
     const parsed = JSON.parse(str)
     console.log('JSON parsed:', parsed)

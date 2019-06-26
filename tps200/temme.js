@@ -3,7 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const temme = require('temme').default
 
-const MAX_OSCLASS_COUNT = 4;
+const MAX_OSCLASS_COUNT = 4
 const selector = `
   address[addrtype=ipv4][addr=$ip];
   address[addrtype=mac][addr=$mac];
@@ -20,16 +20,16 @@ const selector = `
     }
   }
   hosts[up=$up][down=$down];
-`;
+`
 const extraFilters = {
-  distribute(to = 'children') {
+  distribute (to = 'children') {
     const distributees = this[to]
     delete this[to]
     return distributees.map(obj => Object.assign({}, this, obj))
   },
 
-  emptyableFlatten() {
-    return this.reduce((r, a) => r.concat(a), []);
+  emptyableFlatten () {
+    return this.reduce((r, a) => r.concat(a), [])
   }
 }
 const parse = xml => temme(xml, selector, extraFilters)

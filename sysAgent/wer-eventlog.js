@@ -1,11 +1,11 @@
 const eventlog = require('windows-eventlog-reader')
 const reader = eventlog.createReader('Security')
 
-function feedCb(event) {
+function feedCb (event) {
   console.dir(event)
 }
 
-function doneCb(error) {
+function doneCb (error) {
   console.error(error.toString())
 }
 

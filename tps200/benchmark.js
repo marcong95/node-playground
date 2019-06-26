@@ -16,7 +16,7 @@ const result = new Map()
     for (let i = 0; i < 100; i++) {
       let parsed = fn(data)
       if (parsed instanceof Promise) {
-        parsed = await parsed;
+        parsed = await parsed
       }
       if (i === 0) {
         result.set(fnName, parsed)

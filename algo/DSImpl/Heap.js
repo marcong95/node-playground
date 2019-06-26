@@ -1,116 +1,118 @@
-const MAX_HEAP = (a, b) => a - b;
-const MIN_HEAP = (a, b) => b - a;
+const MAX_HEAP = (a, b) => a - b
+const MIN_HEAP = (a, b) => b - a
 
 class BinaryHeap {
-  constructor(compare = MAX_HEAP) {
-    this.compare = compare;
-    this.tree = [];
+  constructor (compare = MAX_HEAP) {
+    this.compare = compare
+    this.tree = []
   }
 
-  static fromArray(arr, compare, heapify = true) {
-    const heap = new BinaryHeap(compare);
-    heap.tree = arr;
+  static fromArray (arr, compare, heapify = true) {
+    const heap = new BinaryHeap(compare)
+    heap.tree = arr
 
     if (heapify) {
-      throw new Error('heapify not implemented');
+      throw new Error('heapify not implemented')
     }
 
-    return heap;
+    return heap
   }
 
-  toArray() {
-    return this.tree.slice();
+  toArray () {
+    return this.tree.slice()
   }
 
-  push(item) {
-    this.tree.push(item);
-    this.siftUp(this.size - 1);
+  push (item) {
+    this.tree.push(item)
+    this.siftUp(this.size - 1)
   }
 
-  pop() {
-    const top = this.top;
-    this.top = this.tree[this.size - 1];
-    this.tree.pop();
-    this.siftDown(0);
-    return top;
+  pop () {
+    const top = this.top
+    this.top = this.tree[this.size - 1]
+    this.tree.pop()
+    this.siftDown(0)
+    return top
   }
 
-  get top() {
-    return this.tree[0];
+  get top () {
+    return this.tree[0]
   }
 
-  set top(value) {
-    this.tree[0] = value;
+  set top (value) {
+    this.tree[0] = value
   }
 
   // delete(index) {}
 
-  siftUp(index) {
-    let parent;
+  siftUp (index) {
+    let parent
     while ((parent = this._getParentIndex(index)) >= 0) {
       if (this.compare(this.tree[parent], this.tree[index]) < 0) {
-        this._swap(parent, index);
+        this._swap(parent, index)
       } else {
-        return;
+        return
       }
-      index = parent;
+      index = parent
     }
   }
 
-  siftDown(index) {
-    let left, right;
+  siftDown (index) {
+    let left, right
     do {
-      left = this._getLeftChildIndex(index);
-      right = this._getRightChildIndex(index);
-      let largest = index;
+      left = this._getLeftChildIndex(index)
+      right = this._getRightChildIndex(index)
+      let largest = index
 
       if (left <= this.size && this.compare(this.tree[index], this.tree[left]) < 0) {
-        largest = left;
+        largest = left
       }
       if (right <= this.size && this.compare(this.tree[index], this.tree[right]) < 0) {
-        largest = right;
+        largest = right
       }
 
       if (largest !== index) {
-        this._swap(index, largest);
+        this._swap(index, largest)
       } else {
-        return;
+        return
       }
-      index = largest;
-    } while (true);
+      index = largest
+    } while (true)
   }
 
-  get size() {
-    return this.tree.length;
+  get size () {
+    return this.tree.length
   }
 
-  _swap(index1, index2) {
-    const tmp = this.tree[index1];
-    this.tree[index1] = this.tree[index2];
-    this.tree[index2] = tmp;
+  _swap (index1, index2) {
+    const tmp = this.tree[index1]
+    this.tree[index1] = this.tree[index2]
+    this.tree[index2] = tmp
   }
 
-  _getParentIndex(index) {
-    return Math.floor((index - 1) / 2);
+  _getParentIndex (index) {
+    return Math.floor((index - 1) / 2)
   }
 
-  _getLeftChildIndex(index) {
-    return index * 2 + 1;
+  _getLeftChildIndex (index) {
+    return index * 2 + 1
   }
 
-  _getRightChildIndex(index) {
-    return index * 2 + 2;
+  _getRightChildIndex (index) {
+    return index * 2 + 2
   }
 }
 
 module.exports = {
+  MAX_HEAP,
+  MIN_HEAP,
   BinaryHeap
 }
 
 if (require && require.main === module) {
-  const heap = BinaryHeap.fromArray([9, 5, 8, 4], MAX_HEAP, false);
-  heap.push(10);
-  console.log(heap.toArray());
-  heap.pop();
-  console.log(heap.toArray());
+  const heap = BinaryHeap.fromArray([9, 5, 8, 4], MAX_HEAP, false)
+  heap.push(10)
+  console.log(heap.toArray())
+  heap.pop()
+  console.log(heap.toArray())
 }
