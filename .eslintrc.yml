@@ -10,6 +10,7 @@ globals:
 parserOptions:
   ecmaVersion: 2018
 rules:
+  no-unused-vars: warn
   space-before-function-paren:
     - error
     - anonymous: never
