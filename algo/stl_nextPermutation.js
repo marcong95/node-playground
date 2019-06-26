@@ -4,7 +4,7 @@
  * @param {number[]} indicies
  * @return {boolean} whether the indicies has next permutation
  */
-function nextPermutation (indicies) {
+function nextPermutation(indicies) {
   if (indicies.length < 2) {
     return false
   }
@@ -29,7 +29,7 @@ function nextPermutation (indicies) {
   }
 }
 
-function permute (list) {
+function permute(list) {
   const indicies = new Array(list.length).fill(0).map((v, i) => i)
   do {
     console.log(indicies.map(i => list[i]))

@@ -4,12 +4,12 @@ const { Parser } = require('xml2js')
 const MAX_OSCLASS_COUNT = 4
 
 class ResultHandler {
-  constructor (xml) {
+  constructor(xml) {
     this.xml = xml
     this.parser = new Parser()
   }
 
-  parse () {
+  parse() {
     return new Promise((resolve, reject) => {
       this.parser.parseString(this.xml, (err, result) => {
         if (err) {
@@ -79,7 +79,7 @@ class ResultHandler {
   }
 }
 
-function diveInto (obj, ...indexes) {
+function diveInto(obj, ...indexes) {
   if (obj == null || indexes.length === 0) {
     return obj || []
   }
@@ -99,11 +99,11 @@ function diveInto (obj, ...indexes) {
   return []
 }
 
-function byAttr (attrName, predicate) {
+function byAttr(attrName, predicate) {
   return node => node.$ && node.$[attrName] === predicate
 }
 
-function getAttr (attrName) {
+function getAttr(attrName) {
   return node => node && node.$ && node.$[attrName]
 }
 

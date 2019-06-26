@@ -22,13 +22,13 @@ const selector = `
   hosts[up=$up][down=$down];
 `
 const extraFilters = {
-  distribute (to = 'children') {
+  distribute(to = 'children') {
     const distributees = this[to]
     delete this[to]
     return distributees.map(obj => Object.assign({}, this, obj))
   },
 
-  emptyableFlatten () {
+  emptyableFlatten() {
     return this.reduce((r, a) => r.concat(a), [])
   }
 }

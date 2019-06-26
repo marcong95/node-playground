@@ -2,13 +2,13 @@
  * @param {number[]} nums
  * @return {number[][]}
  */
-const permuteUnique = function (nums) {
+const permuteUnique = function(nums) {
   const result = []
   _permuteUnique(nums, 0, nums.length - 1, result)
   return result
 }
 
-const shouldSwap = function (nums, from, to) {
+const shouldSwap = function(nums, from, to) {
   for (let i = from; i < to; i++) {
     if (nums[i] === nums[to]) {
       return false
@@ -17,7 +17,7 @@ const shouldSwap = function (nums, from, to) {
   return true
 }
 
-const _permuteUnique = function (nums, from, to, acc) {
+const _permuteUnique = function(nums, from, to, acc) {
   if (from === to) {
     acc.push([...nums])
   } else {

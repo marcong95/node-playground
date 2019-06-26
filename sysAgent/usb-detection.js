@@ -13,8 +13,8 @@ usbDetect.on('remove', getUsbDetectHandler('remove'))
 // Detect add or remove (change)
 usbDetect.on('change', getUsbDetectHandler('change'))
 
-function getUsbDetectHandler (type) {
-  return function (device) {
+function getUsbDetectHandler(type) {
+  return function(device) {
     Object.entries(device)
       .forEach(([key, val]) => {
         if (typeof val === 'string') {

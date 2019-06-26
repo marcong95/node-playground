@@ -4,13 +4,13 @@ const cheerio = require('cheerio')
 const { pick } = require('lodash')
 
 const MAX_OSCLASS_COUNT = 4
-function distribute () {
+function distribute() {
   const distributees = this.children
   delete this.children
   return distributees.map(obj => Object.assign({}, this, obj))
 }
 
-function parse (xml) {
+function parse(xml) {
   const $ = cheerio.load(xml, {
     xmlMode: true
   })

@@ -2,12 +2,12 @@ const MAX_HEAP = (a, b) => a - b
 const MIN_HEAP = (a, b) => b - a
 
 class BinaryHeap {
-  constructor (compare = MAX_HEAP) {
+  constructor(compare = MAX_HEAP) {
     this.compare = compare
     this.tree = []
   }
 
-  static fromArray (arr, compare, heapify = true) {
+  static fromArray(arr, compare, heapify = true) {
     const heap = new BinaryHeap(compare)
     heap.tree = arr
 
@@ -18,16 +18,16 @@ class BinaryHeap {
     return heap
   }
 
-  toArray () {
+  toArray() {
     return this.tree.slice()
   }
 
-  push (item) {
+  push(item) {
     this.tree.push(item)
     this.siftUp(this.size - 1)
   }
 
-  pop () {
+  pop() {
     const top = this.top
     this.top = this.tree[this.size - 1]
     this.tree.pop()
@@ -35,17 +35,17 @@ class BinaryHeap {
     return top
   }
 
-  get top () {
+  get top() {
     return this.tree[0]
   }
 
-  set top (value) {
+  set top(value) {
     this.tree[0] = value
   }
 
   // delete(index) {}
 
-  siftUp (index) {
+  siftUp(index) {
     let parent
     while ((parent = this._getParentIndex(index)) >= 0) {
       if (this.compare(this.tree[parent], this.tree[index]) < 0) {
@@ -57,7 +57,7 @@ class BinaryHeap {
     }
   }
 
-  siftDown (index) {
+  siftDown(index) {
     let left, right
     do {
       left = this._getLeftChildIndex(index)
@@ -80,25 +80,25 @@ class BinaryHeap {
     } while (true)
   }
 
-  get size () {
+  get size() {
     return this.tree.length
   }
 
-  _swap (index1, index2) {
+  _swap(index1, index2) {
     const tmp = this.tree[index1]
     this.tree[index1] = this.tree[index2]
     this.tree[index2] = tmp
   }
 
-  _getParentIndex (index) {
+  _getParentIndex(index) {
     return Math.floor((index - 1) / 2)
   }
 
-  _getLeftChildIndex (index) {
+  _getLeftChildIndex(index) {
     return index * 2 + 1
   }
 
-  _getRightChildIndex (index) {
+  _getRightChildIndex(index) {
     return index * 2 + 2
   }
 }

@@ -3,7 +3,7 @@ const { LinkedListNode, LinkedList } = require('./DSImpl/LinkedList')
 
 class SortableLinkedList extends LinkedList {
   // in-place insertion sort
-  insertionSort () {
+  insertionSort() {
     if (this.head == null) {
       return
     }
@@ -28,7 +28,7 @@ class SortableLinkedList extends LinkedList {
   }
 
   // not-in-place insertion sort, do not manipulate `this`
-  insertionSorted () {
+  insertionSorted() {
     const sorted = new LinkedList()
 
     let insertee = this.head

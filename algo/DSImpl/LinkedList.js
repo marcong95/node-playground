@@ -1,25 +1,25 @@
 const { deepStrictEqual } = require('assert')
 
 class LinkedListNode {
-  constructor (value) {
+  constructor(value) {
     this.value = value
     this.next = null
   }
 }
 
 class LinkedList {
-  constructor () {
+  constructor() {
     this.head = null
     this.tail = null
   }
 
-  static fromArray (arr) {
+  static fromArray(arr) {
     const list = new LinkedList()
     arr.forEach(elmt => list.push(elmt))
     return list
   }
 
-  toArray () {
+  toArray() {
     const arr = []
     let curr = this.head
 
@@ -30,7 +30,7 @@ class LinkedList {
     return arr
   }
 
-  push (value) {
+  push(value) {
     const node = new LinkedListNode(value)
     if (this.head == null) {
       this.head = node
