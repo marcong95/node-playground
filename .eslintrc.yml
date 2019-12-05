@@ -7,8 +7,7 @@ extends:
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
-parserOptions:
-  ecmaVersion: 2018
+parser: babel-eslint
 rules:
   no-unused-vars: warn
   space-before-function-paren:
