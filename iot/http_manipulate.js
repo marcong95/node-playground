@@ -1,31 +1,34 @@
 const axios = require('axios')
 
 const data = {
-  reported: {
-    onoff: 0,
-    gps: {
-      latitude: 23.12908,
-      longitude: 113.26436
-    },
-    param: {
-      frequency: 233
-    }
-  }
+  requestId: '2cf2fc0b-16d5-4d31-ad57-63aea0e6253c',
+  desired: { treatmentTime: '40' }
 }
 const body = JSON.stringify(data)
 
 axios.post(
   'https://api.mqtt.iot.gz.baidubce.com/v1/proxy', body, {
-    param: {
+    params: {
       qos: 0,
-      topic: '$baidu/iot/shadow/DeviceWithLocation/update',
+      topic: '$baidu/iot/shadow/LGT_1300_q2M1nwRx9t_X2xr/update',
       retain: 'false'
     },
     headers: {
-      'auth.username': 'b2xf8wk/DeviceWithLocation',
-      'auth.password': 'Gncvsi3SBzJDgt2o',
+      'auth.username': '3h9za31/LGT_1300_q2M1nwRx9t_X2xr',
+      'auth.password': '1nzqwxmqy4eb0jf4',
       'content-type': 'application/octet-stream'
+    // },
+    // proxy: {
+    //   host: '127.0.0.1',
+    //   port: 8888
     }
   })
-  .then(console.log)
+  .then(resp => {
+    console.log(resp.status + ' ' + resp.statusText)
+    console.log('---------------- HEADER ----------------')
+    console.log(resp.headers)
+    console.log('----------------  BODY  ----------------')
+    console.log('typeof: ' + typeof resp.data)
+    console.log(resp.data)
+  })
   .catch(console.error)

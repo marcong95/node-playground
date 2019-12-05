@@ -1,4 +1,4 @@
-const wevtutil = require('./node-wevtutil')
+const wevtutil = require('wevtutil')
 
 function processEvent(event) {
   console.log(event.pid)

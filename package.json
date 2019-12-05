@@ -35,6 +35,7 @@
     "toml": "^3.0.0",
     "usb": "^1.5.0",
     "usb-detection": "^4.1.0",
+    "wevtutil": "file:local_modules/node-wevtutil",
     "win32-api": "^4.0.0",
     "xml2js": "^0.4.19"
   },
