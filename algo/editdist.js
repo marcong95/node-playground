@@ -40,38 +40,97 @@ function levenshtein(fst, snd, { logDPMatrix } = {}) {
   return dp[fst.length][snd.length]
 }
 
-function getLCSFromMatrix(matrix, fst, i = fst.length, j = matrix.length) {
-  if (i <= 0 || j <= 0) {
-    return ''
-  }
-}
-
-function longestCommonSubsequence(fst, snd, { logDPMatrix } = {}) {
+function _lcsDp(fst, snd) {
   const dp = zeros([fst.length + 1, snd.length + 1])
 
   for (let i = 1; i <= fst.length; i++) {
     for (let j = 1; j <= snd.length; j++) {
       if (fst[i - 1] === snd[j - 1]) {
-        dp[i][j] = dp[i][j - 1] + 1
+        dp[i][j] = dp[i - 1][j - 1] + 1
       } else {
         dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1])
       }
     }
   }
 
+  return dp
+}
+
+function _getLCS(dp, fst, snd, i = fst.length, j = snd.length) {
+  if (i <= 0 || j <= 0) {
+    return ''
+  }
+
+  const curr = dp[i][j]
+  const left = dp[i][j - 1]
+  const up = dp[i - 1][j]
+  if (curr === up + 1 && curr === left + 1) {
+    // upper-left
+    return _getLCS(dp, fst, snd, i - 1, j - 1) + fst[i - 1]
+  } else if (curr === up + 1) {
+    // left
+    return _getLCS(dp, fst, snd, i, j - 1)
+  } else {
+    // up
+    return _getLCS(dp, fst, snd, i - 1, j)
+  }
+}
+
+function longestCommonSubsequence(fst, snd, { logDPMatrix } = {}) {
+  const dp = _lcsDp(fst, snd)
+
   if (logDPMatrix) {
     logDPMatrix(dp)
   }
 
-  return getLCSFromMatrix(dp, fst)
+  return _getLCS(dp, fst, snd)
 }
 
-function shortedEditScript(fst, snd) {}
+function _getSES(dp, fst, snd, i = fst.length, j = snd.length) {
+  if (i <= 0 || j <= 0) {
+    return []
+  }
+
+  const curr = dp[i][j]
+  const left = dp[i][j - 1]
+  const up = dp[i - 1][j]
+  if (curr === up + 1 && curr === left + 1) {
+    // upper-left
+    console.log('UL', fst[i])
+    return _getSES(dp, fst, snd, i - 1, j - 1)
+  } else if (curr === up + 1) {
+    // left
+    console.log('L', fst[i], snd[j])
+    return _getSES(dp, fst, snd, i, j - 1).concat([{
+      op: 'insert',
+      index: i,
+      char: snd[j - 1]
+    }])
+  } else {
+    // up
+    console.log('U', fst[i], snd[j])
+    return _getSES(dp, fst, snd, i - 1, j).concat([{
+      op: 'remove',
+      index: i - 1,
+      char: fst[i - 1]
+    }])
+  }
+}
+
+function shortestEditScript(fst, snd, { logDPMatrix } = {}) {
+  const dp = _lcsDp(fst, snd)
+
+  if (logDPMatrix) {
+    logDPMatrix(dp)
+  }
+
+  return _getSES(dp, fst, snd)
+}
 
 module.exports = {
   levenshtein,
   longestCommonSubsequence,
-  shortedEditScript
+  shortestEditScript
 }
 
 if (require.main === module) {
@@ -83,7 +142,13 @@ if (require.main === module) {
   }
   Object.entries(module.exports).forEach(([name, algo]) => {
     console.log(`-------- ${name} --------\n`)
-    const result = algo('kitten', 'sitting', options)
-    console.log(`result: ${result}\n`)
+    // const result = algo('kitten', 'sitting', options)
+    const result = algo('cbabac', 'abcabba', options)
+    if (typeof result === 'object') {
+      process.stdout.write('result: ')
+      console.dir(result)
+    } else {
+      console.log(`result: ${result}\n`)
+    }
   })
 }
