@@ -9,6 +9,9 @@ function zeros(shape) {
   }
 }
 
+/* implement with reference to
+ * https://www.jianshu.com/p/492536dfa98f
+ */
 function levenshtein(fst, snd, { logDPMatrix } = {}) {
   const dp = zeros([fst.length + 1, snd.length + 1])
 
@@ -134,6 +137,10 @@ function _getSES(dp, fst, snd, i = fst.length, j = snd.length) {
   }
 }
 
+/* implement with reference to
+ * http://www.csie.ntnu.edu.tw/~u91029/LongestCommonSubsequence.html
+ * https://juejin.im/post/5a82f7016fb9a063475f82f0
+ */
 function shortestEditScript(fst, snd, { logDPMatrix, logSES } = {}) {
   const dp = _lcsDp(fst, snd)
 
