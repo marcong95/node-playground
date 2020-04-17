@@ -87,8 +87,24 @@ function longestCommonSubsequence(fst, snd, { logDPMatrix } = {}) {
 }
 
 function _getSES(dp, fst, snd, i = fst.length, j = snd.length) {
-  if (i <= 0 || j <= 0) {
+  if (i <= 0 && j <= 0) {
     return []
+  } if (i === 0) {
+    // left
+    return _getSES(dp, fst, snd, i, j - 1).concat([{
+      op: 'insert',
+      index: i - 1,
+      char: snd[j - 1]
+    }])
+  } else if (j === 0) {
+    // up
+    return _getSES(dp, fst, snd, i - 1, j).concat([{
+      op: 'remove',
+      index: i - 1,
+      char: fst[i - 1]
+    }])
+  } else if (i < 0 || j < 0) {
+    throw new Error(`Reach (${i}, ${j}) when backtracking.`)
   }
 
   const curr = dp[i][j]
@@ -96,19 +112,20 @@ function _getSES(dp, fst, snd, i = fst.length, j = snd.length) {
   const up = dp[i - 1][j]
   if (curr === up + 1 && curr === left + 1) {
     // upper-left
-    console.log('UL', fst[i])
-    return _getSES(dp, fst, snd, i - 1, j - 1)
+    return _getSES(dp, fst, snd, i - 1, j - 1).concat([{
+      op: 'common',
+      index: i - 1,
+      char: fst[i - 1]
+    }])
   } else if (curr === up + 1) {
     // left
-    console.log('L', fst[i], snd[j])
     return _getSES(dp, fst, snd, i, j - 1).concat([{
       op: 'insert',
-      index: i,
+      index: i - 1,
       char: snd[j - 1]
     }])
   } else {
     // up
-    console.log('U', fst[i], snd[j])
     return _getSES(dp, fst, snd, i - 1, j).concat([{
       op: 'remove',
       index: i - 1,
@@ -117,14 +134,18 @@ function _getSES(dp, fst, snd, i = fst.length, j = snd.length) {
   }
 }
 
-function shortestEditScript(fst, snd, { logDPMatrix } = {}) {
+function shortestEditScript(fst, snd, { logDPMatrix, logSES } = {}) {
   const dp = _lcsDp(fst, snd)
 
   if (logDPMatrix) {
     logDPMatrix(dp)
   }
+  const ses = _getSES(dp, fst, snd)
+  if (logSES) {
+    logSES(ses)
+  }
 
-  return _getSES(dp, fst, snd)
+  return ses
 }
 
 module.exports = {
@@ -138,12 +159,20 @@ if (require.main === module) {
     logDPMatrix: matrix => {
       matrix.forEach(row => console.log(row.join(' ')))
       console.log()
+    },
+    logSES: ops => {
+      const chalk = require('chalk')
+      const formatted = ops.map(op => ({
+        insert: chalk.green,
+        remove: chalk.red
+      }[op.op] || chalk.reset)(op.char)).join('')
+      console.log(`visualization: ${formatted}`)
     }
   }
   Object.entries(module.exports).forEach(([name, algo]) => {
     console.log(`-------- ${name} --------\n`)
-    // const result = algo('kitten', 'sitting', options)
-    const result = algo('cbabac', 'abcabba', options)
+    const result = algo('kitten', 'sitting', options)
+    // const result = algo('cbabac', 'abcabba', options)
     if (typeof result === 'object') {
       process.stdout.write('result: ')
       console.dir(result)
