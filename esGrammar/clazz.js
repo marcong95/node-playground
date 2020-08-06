@@ -1,3 +1,7 @@
+/* References:
+ * https://2ality.com/2012/01/objects-as-maps.html
+ */
+
 class Clazz {
   prop = 'prop'
 
