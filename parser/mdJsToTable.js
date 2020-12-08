@@ -190,6 +190,6 @@ function formatTable(tableData) {
 readFile(String.raw`D:\projects\medthings\doc\数据库架构.md`)
   .then(handleMarkdownFile)
   .then(result => {
-    return writeFile(join(__dirname, 'tables.md'), result)
+    return writeFile(join(__dirname, '../output/tables.md'), result)
   })
   .catch(console.error)
