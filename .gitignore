@@ -1,4 +1,7 @@
 node_modules/
 dist/
-*.db
 dbdef-*
+
+data/
+input/
+output/
