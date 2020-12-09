@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Some HTML Demo</title>
+  <style>
+/* CSS you know */
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 12px;
+  background: #22201f;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+body > div + div {
+  margin-top: 1em;
+}
+
+.eink-demo {
+  border: 1px solid #abcdef;
+  color: #fff;
+  font-family: "Cascadia Code PL";
+}
+
+.eink-demo ul {
+  margin: 0;
+  padding-inline-start: 1.5em;
+  list-style-type: '- ';
+}
+
+.eink-27-landscape {
+  width: 296px;
+  height: 128px;
+}
+
+.eink-27-portrait {
+  width: 128px;
+  height: 296px;
+}
+
+.status-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0.5em;
+}
+  </style>
+</head>
+<body>
+  <div class="eink-demo eink-27-landscape">
+    <div class="status-bar">
+      <span>BAT: 23</span>
+    </div>
+    <ul>
+      <li>
+        <span>Train to take</span>
+        <ul>
+          <li>G79</li>
+          <li>1808 - 1858</li>
+          <li>TR14, 12F</li>
+          <li>ENT 28A</li>
+          <li>WAIT @YELLOW</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="eink-demo eink-27-portrait">
+    <div class="status-bar">
+      <span>&#x2895;</span>
+    </div>
+    <ul>
+      <li>
+        <span>Train to take</span>
+        <ul>
+          <li>G79</li>
+          <li>1808 - 1858</li>
+          <li>TR14, 12F</li>
+          <li>ENT 28A</li>
+          <li>WAIT @YELLOW</li>
+        </ul>
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <span>坐火车</span>
+        <ul>
+          <li>G79</li>
+          <li>1808 - 1858</li>
+          <li>14车, 12F座</li>
+          <li>28A闸口</li>
+          <li>黄色标牌候车</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</body>
+</html>
