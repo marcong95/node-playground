@@ -1,2 +1,2 @@
-iot/GeoLite2-City.mmdb filter=lfs diff=lfs merge=lfs -text
-iot/IP_trial_single_WGS84.awdb filter=lfs diff=lfs merge=lfs -text
+src/iot/GeoLite2-City.mmdb filter=lfs diff=lfs merge=lfs -text
+src/iot/IP_trial_single_WGS84.awdb filter=lfs diff=lfs merge=lfs -text
