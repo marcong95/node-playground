@@ -22,16 +22,19 @@ function handleMemberExpression(expression) {
   }
 }
 
-function handleComplexField(expression) {
+function handleComplexField(expression, commentHandler) {
   const { properties } = expression
 
   return Object.fromEntries(properties.map(prop => {
-    const { key, value } = prop
+    const { key, value, leadingComments = [], trailingComments = [] } = prop
+    if (leadingComments || trailingComments) {
+      commentHandler([...leadingComments, ...trailingComments], prop)
+    }
     switch (value.type) {
       case 'MemberExpression':
         return [key.name, handleMemberExpression(value)]
       case 'ObjectExpression':
-        return [key.name, handleComplexField(value)]
+        return [key.name, handleComplexField(value, commentHandler)]
       default:
         if (value.type.endsWith('Literal')) {
           return [key.name, value.value]
@@ -46,7 +49,7 @@ function handleComments(comments, parent, codeByLines) {
   const commentMeta = {}
 
   comments.forEach(comment => {
-    const { value } = comment
+    const { value, loc } = comment
     let commentContent
 
     switch (comment.type) {
@@ -56,17 +59,21 @@ function handleComments(comments, parent, codeByLines) {
       case 'CommentBlock':
         commentContent = value.split('\n')
           .map(ln => ln.trim())
-          .join(LINEBREAK_IN_TABLE)
+          .join('\n')
         break
     }
-    if (comment.end < parent.start && comment.type === 'CommentLine') {
-      // a CommentLine but in leadingComment,
-      // which belongs to the PREVIOUS prop
+
+    const lineNum = loc.start.line
+    const commentLine = codeByLines[lineNum - 1].replace(/^\s*(?:\/\/|\/\*)/, '')
+    if (comment.type === 'CommentLine' &&
+      comment.end < parent.start &&
+      commentLine.replace(/\*\/$/, '') !== value) {
+      // a CommentLine in leadingComment but not occupy a whole line,
+      // which is the trailingComment for the PREVIOUS prop
       commentMeta._previousComment = commentMeta._previousComment
         ? commentMeta._previousComment + '\n' + commentContent
         : commentContent
     } else {
-      // standalone comment line, which belongs to this prop
       commentMeta.comment = commentMeta.comment
         ? commentMeta.comment + '\n' + commentContent
         : commentContent
@@ -89,7 +96,17 @@ function handleFieldDefinition(prop, codeByLines) {
       meta.type = handleMemberExpression(value)
       break
     case 'ObjectExpression':
-      meta = handleComplexField(value)
+      meta = handleComplexField(value, (comments, parent) => {
+        const innerComment = handleComments(comments, parent, codeByLines)
+        const { _previousComment } = innerComment
+        if (!_previousComment) {
+          return
+        }
+        commentMeta.comment = commentMeta.comment
+          ? [commentMeta.comment, _previousComment].join('\n')
+          : _previousComment
+      })
+      console.log(commentMeta)
       break
     default:
       console.error(`Unrecognized object property type '${value.type}'`)
@@ -183,7 +200,9 @@ function formatTable(tableData) {
       .join(' | '))
 
   return [header, sep, ...body]
-    .map(line => `| ${line.trimEnd()} |`.replace(/\| \|$/, '|'))
+    .map(line => `| ${line.trimEnd()} |`
+      .replace(/\| \|$/, '|')
+      .replace('\n', LINEBREAK_IN_TABLE))
     .join('\n')
 }
 
