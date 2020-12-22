@@ -43,7 +43,7 @@
     "ref-struct": "^1.1.0",
     "sequelize": "^5.21.5",
     "sqlite3": "^4.1.1",
-    "systeminformation": "^4.23.3",
+    "systeminformation": "^4.31.1",
     "temme": "^0.8.3",
     "toml": "^3.0.0",
     "usb": "^1.6.3",
