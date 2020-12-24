@@ -10,6 +10,7 @@ const LINEBREAK_IN_TABLE = '<br>'
 
 function handleMemberExpression(expression) {
   switch (expression.object.name) {
+    case 'Sequelize':
     case 'DataTypes':
       return expression.property.name
     default:
@@ -106,7 +107,6 @@ function handleFieldDefinition(prop, codeByLines) {
           ? [commentMeta.comment, _previousComment].join('\n')
           : _previousComment
       })
-      console.log(commentMeta)
       break
     default:
       console.error(`Unrecognized object property type '${value.type}'`)

@@ -29,7 +29,7 @@
     "hangul-js": "^0.2.6",
     "iconv-lite": "^0.5.2",
     "jschardet": "^2.1.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.20",
     "lokijs": "^1.5.8",
     "markdown-it": "^12.0.2",
     "maxmind": "^4.3.1",
