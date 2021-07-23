@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Some HTML Demo</title>
+  <style>
+/* CSS you know */
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 12px;
+  background: #22201f;
+}
+
+body {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  width: 360px;
+  height: 640px;
+  border: 1px dashed #abcdef;
+}
+
+.result-list {
+  width: 360px;
+  height: 640px;
+  color: #fff;
+  overflow-y: auto;
+}
+  </style>
+</head>
+<body>
+  <iframe id="container"
+    class="container"
+    src="./preloader.html"
+    frameborder="0"></iframe>
+  <ul id="resultList"
+    class="result-list"></ul>
+
+<script>
+window.onload = () => {
+  const appendResult = str => {
+    const item = document.createElement('li')
+    item.innerText = str
+    list.appendChild(item)
+  }
+
+  const iframe = document.getElementById('container')
+  const list = document.getElementById('resultList')
+  window.addEventListener('message', e => {
+    console.log('msg from iframe', e.data)
+    appendResult(e.data)
+  })
+
+  appendResult('Here shows messages received.')
+}
+</script>
+</body>
+</html>

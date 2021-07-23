@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Preloader Demo</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: #22201f;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preloader {
+      position: relative;
+      width: 814px;
+      /* height: 400px; */
+      overflow-x: hidden;
+      overflow-y: hidden;
+      white-space: nowrap;
+      /* transform: scale(.5); */
+    }
+
+    .preloader-mover {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      /* (128px + 10px margin) * 7 */
+      /* width: 966px; */
+      height: 100%;
+      animation: preloader-move 6s linear infinite;
+    }
+
+    .preloader-item {
+      margin-left: 10px;
+    }
+
+    #fetch-result {
+      color: #ccc;
+      font-family: monospace;
+    }
+
+    @keyframes preloader-move {
+      0% {
+        transform: translateX(-100%);
+      }
+
+      100% {
+        transform: translateX(0%);
+      }
+    }
+
+    @media screen and (max-width: 814px) {
+      html {
+        font-size: calc(1000vw / 814);
+      }
+
+      .preloader {
+        width: 100vw;
+      }
+
+      .preloader-mover {
+        width: 96.6rem;
+      }
+
+      .preloader-item {
+        width: 12.8rem;
+        margin-left: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="preloader">
+    <div class="preloader-mover">
+      <img src="./images/1.webp" class="preloader-item">
+      <img src="./images/2.webp" class="preloader-item">
+      <img src="./images/3.webp" class="preloader-item">
+      <img src="./images/4.webp" class="preloader-item">
+      <img src="./images/5.webp" class="preloader-item">
+      <img src="./images/6.webp" class="preloader-item">
+      <img src="./images/7.webp" class="preloader-item">
+    </div>
+    <div class="preloader-mover">
+      <img src="./images/1.webp" class="preloader-item">
+      <img src="./images/2.webp" class="preloader-item">
+      <img src="./images/3.webp" class="preloader-item">
+      <img src="./images/4.webp" class="preloader-item">
+      <img src="./images/5.webp" class="preloader-item">
+      <img src="./images/6.webp" class="preloader-item">
+      <img src="./images/7.webp" class="preloader-item">
+    </div>
+  </div>
+  <p id="fetch-result">Here shows fetch result.</p>
+
+  <!-- uni 的 SDK -->
+  <script type="text/javascript" src="https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.1.5.2.js"></script>
+  <script>
+    const resDispEl = document.getElementById('fetch-result')
+    fetch('http://zhangheapi.com:7001/serverTime')
+      .then(resp => resp.json())
+      .then(json => {
+        resDispEl.innerText = JSON.stringify(json)
+        return json
+      })
+      .catch(err => {
+        resDispEl.innerText = err.message
+        window._err = err
+      })
+
+    const images = document.getElementsByClassName('preloader-item')
+
+    document.addEventListener('UniAppJSBridgeReady', function() {
+      console.log('UniAppJSBridgeReady')
+
+      let messenger = uni
+      uni.getEnv(function(res) {
+        console.log('uni.getEnv:' + JSON.stringify(res));
+        if (res.h5) {
+          messenger = window.parent
+        }
+      })
+
+      const handleImageClick = e => {
+        const [, idxStr] = /(\d+)\.webp/.exec(e.target.src)
+        const index = parseInt(idxStr) || 0
+        const msg = {
+          type: 'imageClick',
+          index,
+          name: ['unknown', 'cube', 'quads', 'rubik', 'tetras',
+            'tetris', 'snake', '2048'][index] || 'unknown'
+        }
+
+        console.log(
+          `msg will be sent by ${messenger.constructor.name}`, msg)
+        messenger.postMessage(msg, '*')
+      }
+
+      ;[].forEach.call(images, img => {
+        img.addEventListener('click', handleImageClick)
+      })
+    })
+    window.addEventListener('message', e => {
+      console.log('from uniapp:', JSON.stringify(e.detail))
+    })
+  </script>
+</body>
+</html>
