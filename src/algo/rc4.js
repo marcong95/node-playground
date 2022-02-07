@@ -6,6 +6,12 @@ function rc4(data, key) {
 
   for (i = 0; i < 256; i++) {
     j = (j + s[i] + key[i % key.length]) % 256
+
+    // 协议文档中生成 key 的方法似乎与标准 RC4 不一致，略迷
+    // 协议文档中的写法为：j = (j + key[i] + (int) T[i]) % 255;
+    // 其中 T[i] = key[i]; i in [0, 256)
+    // j = (j + (key[i] || 0) * 2) % 255
+
     ;[s[i], s[j]] = [s[j], s[i]]
   }
 
@@ -26,29 +32,78 @@ function rc4(data, key) {
 
 function formatBuffer(buffer) {
   return Array.from(buffer)
-    .map(byte => byte ? byte.toString(16).padStart(2, '0') : '??')
+    .map(byte => byte != null && !Number.isNaN(byte) ? byte.toString(16).padStart(2, '0') : '??')
     .join(' ')
 }
-
-function encodeBase64(str) {
-  return Buffer.from(str).toString('base64')
-}
-
-const data = [0x1d, 0x0a, 0x70]
-const key = [0x30, 0x31]
-
-const ciphered = rc4(data, key) // should be [0xc1, 0xc8, 0xb5]
-console.log(formatBuffer(ciphered))
-console.log(formatBuffer(rc4(ciphered, key)))
 
 function rc4String(data, key) {
   const [bufData, bufKey] = [data, key].map(str => Array.from(Buffer.from(str, 'utf-8')))
   return rc4(bufData, bufKey)
 }
 
+function encodeBase64(str) {
+  return Buffer.from(str).toString('base64')
+}
+
+function isDataMatched(data1, data2) {
+  return data1.length === data2.length &&
+    data1.every((byte, offset) => byte === data2[offset])
+}
+
+;[
+  // Test cases from Wikipedia
+  // ['Plaintext', 'Key', Buffer.from('BBF316E8D940AF0AD3', 'hex')],
+  // ['pedia', 'Wiki', Buffer.from('1021BF0420', 'hex')],
+  // ['Attack at dawn', 'Secret', Buffer.from('45A01F645FC35B383552544B9BF5', 'hex')],
+
+  // Test cases from Protocol Specs
+  [[0x01, 0x0a, 0x70], [0x30, 0x31], [0xc1, 0xc8, 0xb5]],
+  [[0x01, 0x65], [0x30, 0x31], [0xc1, 0xa7]],
+  [[0x01, 0x01, 0x00, 0x01, 0x00, 0x01, 0x6a], [0x30, 0x31], [0xc1, 0xc3, 0xc5, 0xc8, 0xce, 0xd5, 0xb1]]
+].forEach(([data, key, expected], idx) => {
+  if (idx > 0) {
+    console.log(new Array(64).fill('-').join(''))
+  }
+
+  let ciphered
+  if (typeof data === 'string') {
+    console.log(`   encrypt \`${data}\` with key \`${key}\``)
+    console.log('  encoded:', formatBuffer(Buffer.from(data, 'utf-8')))
+
+    ciphered = rc4String(data, key)
+    console.log('   actual:', formatBuffer(ciphered))
+
+    if (expected != null) {
+      const isMatched = isDataMatched(ciphered, expected)
+      console.log(' expected:', formatBuffer(expected), isMatched ? '(matched)' : '(mismatched)')
+    }
+
+    const decrypted = rc4String(ciphered, key)
+    console.log('decrypted:', formatBuffer(decrypted))
+    const decoded = Buffer.from(decrypted).toString('utf-8')
+    console.log(`  decoded: \`${decoded}\``, decoded === data ? '(matched)' : '(mismatched)')
+  } else if (data.length != null) {
+    console.log('   encrypt', formatBuffer(data), 'with key', formatBuffer(key))
+
+    ciphered = rc4(data, key)
+    console.log('   actual:', formatBuffer(ciphered))
+
+    if (expected != null) {
+      const isMatched = isDataMatched(ciphered, expected)
+      console.log(' expected:', formatBuffer(expected), isMatched ? '(matched)' : '(mismatched)')
+    }
+
+    const decrypted = rc4(ciphered, key)
+    console.log('decrypted:', formatBuffer(decrypted), isDataMatched(decrypted, data) ? '(matched)' : '(mismatched)')
+  } else {
+    console.error('unknown data type:', typeof data, data.constructor.name)
+  }
+})
+
 module.exports = {
   rc4,
   rc4String,
   formatBuffer,
-  encodeBase64
+  encodeBase64,
+  isDataMatched
 }
