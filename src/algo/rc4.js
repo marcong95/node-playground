@@ -11,6 +11,7 @@ function rc4(data, key) {
     // 协议文档中的写法为：j = (j + key[i] + (int) T[i]) % 255;
     // 其中 T[i] = key[i]; i in [0, 256)
     // j = (j + (key[i] || 0) * 2) % 255
+    // j = (j + s[i] + (key[i] || 0)) % 256
 
     ;[s[i], s[j]] = [s[j], s[i]]
   }
