@@ -1,7 +1,7 @@
-const ffi = require('ffi')
-const ref = require('ref')
-const Struct = require('ref-struct')
-const refArray = require('ref-array')
+const ffi = require('ffi-napi')
+const ref = require('ref-napi')
+const Struct = require('ref-struct-napi')
+const refArray = require('ref-array-napi')
 const { DTypes: DT } = require('win32-api')
 
 const iconv = require('iconv-lite')
@@ -31,7 +31,7 @@ IP_ADDR_STRING.defineProperty('Next', PIP_ADDR_STRING)
 const __IP_ADAPTER_INFO = Struct({
   // Next: PIP_ADAPTER_INFO,
   ComboIndex: DT.DWORD,
-  AdapterName: refArray(ref.types.char, MAX_ADAPTER_NAME_LENGTH + 4),
+  AdapterName: refArray(ref.types.char, +4),
   Description: refArray(ref.types.char, MAX_ADAPTER_DESCRIPTION_LENGTH + 4),
   AddressLength: DT.UINT,
   Address: refArray(DT.BYTE, MAX_ADAPTER_ADDRESS_LENGTH),
