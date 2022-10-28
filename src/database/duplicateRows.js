@@ -1,5 +1,6 @@
 const uuid = require('uuid')
-const { sequelize, Patient } = require('./dbdef-iot')
+const { sequelize, Patient } =
+  require('./dbdef-iot').initWithSequelizeOptions()
 
 const whereToDuplicate = {
   mrNumber: 'BILI2333'

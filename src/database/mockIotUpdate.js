@@ -1,7 +1,8 @@
 const dayjs = require('dayjs')
 const randomstring = require('randomstring')
 // const uuid = require('uuid')
-const { sequelize, Patient, Report } = require('./dbdef-iot')
+const { sequelize, Patient, Report } =
+  require('./dbdef-iot').initWithSequelizeOptions()
 
 ;(async function() {
   const patient = await Patient.findOne({

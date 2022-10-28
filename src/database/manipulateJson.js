@@ -1,7 +1,8 @@
 const dayjs = require('dayjs')
 const randomstring = require('randomstring')
 // const uuid = require('uuid')
-const { sequelize, Patient } = require('./dbdef-iot')
+const { sequelize, Patient } =
+  require('./dbdef-iot').initWithSequelizeOptions()
 
 ;(async function() {
   // const [rowsAffected] = await Patient.update({

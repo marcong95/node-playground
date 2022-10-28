@@ -1,7 +1,15 @@
 // const uuid = require('uuid')
 // const { generate } = require('randomstring')
 
-const { Patient } = require('./dbdef-ot')
+const Sequelize = require('sequelize')
+const { initWithSequelizeInstance } = require('./dbdef-ot')
+
+const sequelize = new Sequelize('dbzhanghe', null, null, {
+  dialect: 'sqlite',
+  storage: 'D:\\projects\\ot\\data\\nodedb',
+  logging: false
+})
+const { Patient } = initWithSequelizeInstance(sequelize)
 
 // const testdata = {
 //   guid: uuid(),
