@@ -46,7 +46,7 @@
     "ref-union-di": "^1.0.1",
     "sequelize": "^5.21.5",
     "sqlite3": "^4.2.0",
-    "systeminformation": "^4.33.1",
+    "systeminformation": "^5.6.4",
     "temme": "^0.8.3",
     "toml": "^3.0.0",
     "usb": "^1.6.3",
