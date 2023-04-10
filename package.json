@@ -53,7 +53,7 @@
     "usb-detection": "^4.7.0",
     "wevtutil": "file:local_modules/node-wevtutil",
     "win32-api": "^19.8.1",
-    "xml2js": "^0.4.23"
+    "xml2js": "^0.5.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
