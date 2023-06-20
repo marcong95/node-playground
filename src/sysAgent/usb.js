@@ -1,4 +1,4 @@
-const usb = require('usb')
+const { usb } = require('usb')
 
 console.log(usb.getDeviceList())
 usb.on('attach', device => {
