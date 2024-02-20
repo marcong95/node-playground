@@ -52,7 +52,9 @@
     "usb-detection": "^4.7.0",
     "wevtutil": "github:mattpodwysocki/node-wevtutil",
     "win32-api": "^20.4.1",
-    "xml2js": "^0.6.0"
+    "xml2js": "^0.6.0",
+    "zeromq": "^5.3.1",
+    "zerorpc": "git+https://gitee.com/marcong95/zerorpc-node.git"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

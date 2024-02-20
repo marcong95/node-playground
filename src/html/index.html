@@ -47,6 +47,20 @@
       margin-left: 10px;
     }
 
+    .slogan {
+      color: #ccc;
+      text-align: center;
+    }
+
+    .slogan p {
+      margin-block: .5em;
+    }
+
+    .slogan.vertical {
+      writing-mode: vertical-rl;
+      line-height: 1.2;
+    }
+
     #fetch-result {
       color: #ccc;
       font-family: monospace;
@@ -59,6 +73,13 @@
 
       100% {
         transform: translateX(0%);
+      }
+    }
+
+    @media screen and (min-width: 814px) {
+      .slogan {
+        position: absolute;
+        left: calc(50vw + 407px);
       }
     }
 
@@ -104,13 +125,18 @@
       <img src="./images/7.webp" class="preloader-item">
     </div>
   </div>
+  <div class="slogan vertical">
+    <p lang="zh">生命不息 折腾不止</p>
+    <p lang="eo">Ĉesu z-turniĝi kaj vi ceŝas vivi</p>
+    <p lang="ja">息は止まる前にＺターンを止めない</p>
+  </div>
   <p id="fetch-result">Here shows fetch result.</p>
 
   <!-- uni 的 SDK -->
   <script type="text/javascript" src="https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.1.5.2.js"></script>
   <script>
     const resDispEl = document.getElementById('fetch-result')
-    fetch('http://zhangheapi.com:7001/serverTime')
+    fetch('http://zhangheapi.com:7002/serverTime')
       .then(resp => resp.json())
       .then(json => {
         resDispEl.innerText = JSON.stringify(json)
