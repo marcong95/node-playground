@@ -1,3 +1,4 @@
+const { setTimeout } = require('timers/promises')
 const { Client } = require('zerorpc')
 
 class PromisifiedClient extends Client {
@@ -24,8 +25,9 @@ client.connect('tcp://127.0.0.1:4242')
 
 ;(async function() {
   try {
-    const resp = await client.invokeAsync('init_robot', '192.168.227.128', 30004)
-    console.log(resp)
+    console.log(await client.invokeAsync('add', 1, 2))
+    await setTimeout(1000)
+    console.log(await client.invokeAsync('init_robot', '192.168.227.128', 30004))
   } catch (err) {
     console.error(err)
   } finally {
