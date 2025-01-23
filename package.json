@@ -11,8 +11,8 @@
     "playground"
   ],
   "repository": {
-    "type": "enigma",
-    "url": "enigma://404"
+    "type": "git",
+    "url": "git+https://github.com/marcong95/node-playground.git"
   },
   "author": "Marco",
   "license": "WTFPL",
